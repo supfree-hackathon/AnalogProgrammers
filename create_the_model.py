@@ -45,8 +45,11 @@ if __name__ == '__main__':
             new_train_labels.append(np.array([class_ids.index(train_labels[IMG_INDEX])]))
 
             test_img = train_images[IMG_INDEX]
+            # print(type(test_img))
+            # print(test_img.shape)
             img = image.img_to_array(test_img)  # convert image to numpy arry
             img = img.reshape((1,) + img.shape)  # reshape image
+            # print(test_img.shape)
 
             i = 0
             if K:
@@ -123,6 +126,11 @@ if __name__ == '__main__':
     print(len(test_images))
     print(len(test_labels))
 
+    # print(test_images[0].shape)
+    # print(type(test_images[0]))
+    # print(test_images[0])
+    # input()
+
     model = models.Sequential()
     model.add(layers.Conv2D(32, (3, 3), activation='tanh', input_shape=(32, 32, 3)))
     model.add(layers.MaxPooling2D((2, 2)))
@@ -135,7 +143,7 @@ if __name__ == '__main__':
     model.summary()  # let's have a look at our model so far
     model.add(layers.Flatten())
     model.add(layers.Dense(128, activation='swish'))
-    model.add(layers.Dense(5))
+    model.add(layers.Dense(3))
     model.summary()
 
     base_learning_rate = 0.001
@@ -147,6 +155,16 @@ if __name__ == '__main__':
                         validation_data=(test_images, test_labels))
 
     test_loss, test_acc = model.evaluate(test_images, test_labels, verbose=2)
-    print(test_acc)
+    # print(test_acc)
 
-    model.save('sup_free_model')
+    model.save('sup_free_model.h5')
+    print('-----')
+    for i in range(5):
+        test_img = test_images[i]
+        img = image.img_to_array(test_img)  # convert image to numpy arry
+        img = img.reshape((1,) + img.shape)
+        pred = model.predict(img)
+        print(pred)
+        # print(test_labels)
+        print(test_labels[i])
+    # print('-----')
